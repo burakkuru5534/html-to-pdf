@@ -1,8 +1,8 @@
-# User Management Service
+# Html To Pdf Service
 
 ## Introduction
 
-In this project, we will be building a user management service.
+In this project, we will be building a html to pdf service.
 
 ### Languages and frameworks
 
@@ -22,33 +22,31 @@ Postgresql was used as the database language.
 
 Tables created:
 
-table name:usr
+table html_content:document
 columns:
 id: serial primary key
-name: text
-password: text
-email: text (unique)
+html_content: text
+pdf_file_html_content: text (unique)
 
 ## Problem solution
 
-We should be able to create, read, update, and delete users.
-We should prevent users from creating duplicate emails.
+We should be able to create, read, and delete,list documents and also download it.
+We should prevent document from creating duplicate pdf file html_contents.
 
-### Create User
+### Create Document
 
-Create User request url example:
+Create Document request url example:
 
 Method: POST
 
-http://localhost:8080/users
+http://localhost:8080/api/document
 
 request Body Example:
 
  ```json
 {
-  "name": "Burak KURU",
-  "email": "burak.kuru@gmail.com",
-  "password": "test123456"
+  "html_content": "<h1>hello world</h1>",
+  "pdf_file_name": "hello_world.pdf"
 }
  ```
 
@@ -59,8 +57,8 @@ for 200:
  ```json
 {
   "id": 1,
-  "name": "Burak KURU",
-  "email": "burak.kuru@gmail.com"
+  "html_content": "<h1>hello world</h1>",
+  "pdf_file_name": "hello_world.pdf"
 }
  ```
 
@@ -72,7 +70,7 @@ for 400:
 
 for 403:
 ```json
-{"error": "User with that email already exists"}
+{"error": "Document with that pdf_file_name already exists"}
 ```
 
 for 500:
@@ -80,15 +78,15 @@ for 500:
 {"error": "server error"}
 ```
 
-### Get User 
+### Get Document 
 
-Get User request url example:
+Get Document request url example:
 
 Method: GET
 
-http://localhost:8080/user?id=1
+http://localhost:8080/Document?id=1
 
-id: this id should be one of the user's ids.
+id: this id should be one of the Document's ids.
 
 request Body:
 
@@ -98,8 +96,8 @@ for 200:
  ```json
 {
   "id": 1,
-  "name": "Burak KURU",
-  "email": "burak.kuru@gmail.com"
+  "html_content": "<h1>hello world</h1>",
+  "pdf_file_name": "hello_world.pdf"
 }
  ```
 
@@ -111,7 +109,7 @@ for 400:
 
 for 404:
 ```json
-{"error": "User with that id does not exist"}
+{"error": "Document with that id does not exist"}
 ```
 
 for 500:
@@ -119,65 +117,15 @@ for 500:
 {"error": "server error"}
 ```
 
-### Update User
 
-Update User request url example:
-Method: PATCH
+### Delete Document
 
-http://localhost:8080/users?id=1
-
-id: this id should be one of the user's ids.
-request Body Example:
-
- ```json
-{
-  "name":"Updated Name",
-  "email":"updatedemail@gmail.com",
-  "password":"updatedPass"
-}
- ```
-
-response example:
-
-for 200:
- ```json
-{
-  "id": 1,
-  "name":"Updated Name",
-  "email":"updatedemail@gmail.com",
-  "password":"updatedPass"
-}
- ```
-
-for 403:
-```json
-{"error": "User with that email already exists"}
-```
-
-for 400:
-
-```json
-{"error": "Bad request"}
-```
-
-for 404:
-```json
-{"error": "User with that id does not exist"}
-```
-
-for 500:
-```json
-{"error": "server error"}
-```
-
-### Delete User
-
-Delete User request url example:
+Delete Document request url example:
 Method: DELETE
 
-http://localhost:8080/users?id=1
+http://localhost:8080/api/document?id=1
 
-id: this id should be one of the user's ids.
+id: this id should be one of the Document's ids.
 
 response example:
 
@@ -192,7 +140,7 @@ for 400:
 
 for 404:
 ```json
-{"error": "User with that id does not exist"}
+{"error": "Document with that id does not exist"}
 ```
 
 for 500:
@@ -200,27 +148,56 @@ for 500:
 {"error": "server error"}
 ```
 
-### User List
+### Document List
 
-User List request url example:
+Document List request url example:
 Method: GET
 
-http://localhost:8080/users
+http://localhost:8080/document
 
 response example:
 
 for 200:
  ```json
 [{
-  "name":"Updated Name",
-  "email":"updatedemail@gmail.com",
-  "password":"updatedPass"
+  "html_content":"<h1>hello world</h1>",
+  "pdf_file_name":"hello_world.pdf"
 }]
  ```
 for 400:
 
 ```json
 {"error": "Bad request"}
+```
+
+for 500:
+```json
+{"error": "server error"}
+```
+
+### Download Document
+
+Download Document request url example:
+
+Method: GET
+
+http://localhost:8080/document/download?id=1
+
+id: this id should be one of the Document's ids.
+
+response example:
+
+for 200: "ok"
+
+for 400:
+
+```json
+{"error": "Bad request"}
+```
+
+for 404:
+```json
+{"error": "Document with that id does not exist"}
 ```
 
 for 500:
@@ -238,7 +215,7 @@ go test -v
 
 ## Conclusion
 
-We have successfully implemented the user management service.
+We have successfully implemented the HTML to PDF service.
 
 note: I was going to use chi router to get id from url but I couldn't get it to work for testing library. So I used query params instead.
 
