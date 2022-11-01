@@ -55,8 +55,7 @@ create table if not exists document
     constraint usr_pkey
     primary key,
     html_content text,
-    pdf_file_name text unique,
-    directory_path text
+    pdf_file_name text unique
 );
 
 create table if not exists sysusr
